@@ -10,14 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Pessoas.hasMany(models.Turmas, { foreignKey: 'docente_id'} )
-      Pessoas.hasMany(models.Matriculas, { foreignKey: 'estudante_id'} )
+      Pessoas.hasMany(models.Turmas, { foreignKey: 'docente_id'})
+      Pessoas.hasMany(models.Matriculas, { foreignKey: 'estudante_id'})
     }
   }
   Pessoas.init({
     nome: DataTypes.STRING,
     ativo: DataTypes.BOOLEAN,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'dado do tipo e-mail inválido'
+        }
+      }
+    },
     role: DataTypes.STRING
   }, {
     sequelize,
@@ -27,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       where: { ativo: true }
     },
     scopes: {
-      todos: { where: {} }
+      todos: { where: {}}
     }
   });
   return Pessoas;
