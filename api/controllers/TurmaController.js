@@ -10,7 +10,7 @@ class TurmaController {
     }
   }
 
-  static async pegaUmaTurma(req, res) {
+  static async pegaUmaTurma (req, res) {
     const { id } = req.params
     try {
       const umaTurma = await database.Turmas.findOne( { 
@@ -24,7 +24,7 @@ class TurmaController {
     }
   }
 
-  static async criaTurma(req, res) {
+  static async criaTurma (req, res) {
     const novaTurma = req.body
     try {
       const novaTurmaCriada = await database.Turmas.create(novaTurma)
@@ -34,7 +34,7 @@ class TurmaController {
     }
   }
 
-  static async atualizaTurma(req, res) {
+  static async atualizaTurma (req, res) {
     const { id } = req.params
     const novasInfos = req.body
     try {
@@ -46,12 +46,22 @@ class TurmaController {
     }
   }
 
-  static async apagaTurma(req, res) {
+  static async apagaTurma (req, res) {
     const { id } = req.params
     try {
       await database.Turmas.destroy({ where: { id: Number(id) }})
       return res.status(200).json({ mensagem: `id ${id} deletado` })
 
+    } catch (error) {
+      return res.status(500).json(error.message)
+    }
+  }
+
+  static async restauraTurma (req, res) {
+    const { id } = req.params
+    try {
+      await database.Turmas.restore( { where: { id: Number(id) } } )
+      return res.status(200).json({ mensagem: `id ${id} restaurado`})
     } catch (error) {
       return res.status(500).json(error.message)
     }
